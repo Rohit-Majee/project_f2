@@ -1,23 +1,33 @@
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import toast from "react-hot-toast";
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function FakeNews() {
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [text, setText] = useState("");
+
+  const analyzeNews = useMutation({
+    mutationFn: async (newsText) => {
+      const response = await axios.post(`${BASE_URL}/fakenews`, {
+        text: newsText,
+      });
+      return response.data;
+    },
+    onError: (error) => {
+      const message =
+        error?.response?.data?.detail ||
+        error.message ||
+        "Something went wrong!";
+      toast.error(message);
+    },
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    // Simulate backend call
-    setTimeout(() => {
-      setResult({
-        status: "Fake",
-        confidence: "87%",
-        message:
-          "This news article is likely manipulated. Please verify from trusted sources.",
-      });
-      setLoading(false);
-    }, 2000);
+    if (!text.trim()) return;
+    analyzeNews.mutate(text);
   };
 
   return (
@@ -48,6 +58,8 @@ export default function FakeNews() {
               id="newsInput"
               rows="6"
               placeholder="Paste the news text here..."
+              value={text}
+              onChange={(e) => setText(e.target.value)}
               className="w-full p-4 rounded-lg bg-gray-800 border border-gray-700 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             ></textarea>
           </div>
@@ -55,41 +67,47 @@ export default function FakeNews() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={analyzeNews.isPending}
             className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 text-white font-semibold py-3 rounded-lg transition-transform duration-300 hover:scale-105"
           >
-            {loading ? "Analyzing..." : "Analyze News"}
+            {analyzeNews.isPending ? "Analyzing..." : "Analyze News"}
           </button>
         </form>
       </div>
 
-      {/* Output Section (only when result exists) */}
-      {result && (
+      {/* Output Section */}
+      {analyzeNews.isSuccess && (
         <div className="mt-10 w-full max-w-2xl">
           <div className="bg-gray-900 border border-gray-800 rounded-2xl shadow-xl p-6">
             <h2 className="text-2xl font-bold text-indigo-400 mb-4">
               Analysis Result
             </h2>
             <p className="text-lg">
-              <span className="font-semibold">Status:</span>{" "}
+              <span className="font-semibold">Result:</span>{" "}
               <span
                 className={
-                  result.status === "Fake"
+                  analyzeNews.data.result.includes("Fake")
                     ? "text-red-400 font-bold"
                     : "text-green-400 font-bold"
                 }
               >
-                {result.status}
+                {analyzeNews.data.result}
               </span>
             </p>
             <p className="text-lg">
               <span className="font-semibold">Confidence:</span>{" "}
               <span className="text-yellow-400 font-bold">
-                {result.confidence}
+                {(analyzeNews.data.confidence * 100).toFixed(0)}%
               </span>
             </p>
-            <p className="mt-4 text-gray-300">{result.message}</p>
           </div>
+        </div>
+      )}
+
+      {/* Error Section */}
+      {analyzeNews.isError && (
+        <div className="mt-6 text-red-400 font-semibold">
+          Something went wrong: {analyzeNews.error.message}
         </div>
       )}
     </div>

@@ -3,7 +3,7 @@ import HomePage from "./pages/HomePage";
 import Layout from "./pages/Layout";
 import FakeNews from "./pages/FakeNews";
 import DeepFake from "./pages/DeepFake";
-
+import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <>
@@ -14,6 +14,7 @@ function App() {
           <Route path="/deepfake" element={<DeepFake />} />
         </Route>
       </Routes>
+      <Toaster />
     </>
   );
 }
