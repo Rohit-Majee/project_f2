@@ -1,0 +1,30 @@
+[project]
+name = "deepfake-defense"
+version = "1.0.0"
+description = "Multi-modal forensic API for Deepfakes and Fake News"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "python-multipart",
+    "scikit-learn",
+    "pandas",
+    "numpy",
+    "torch",
+    "torchvision",
+    "transformers",
+    "timm",
+    "opencv-python-headless",
+    "tensorflow>=2.21.0",
+    "mtcnn>=1.0.0",
+]
+
+[[tool.uv.index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch" }
+torchvision = { index = "pytorch" }

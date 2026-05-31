@@ -1,0 +1,95 @@
+# ==============================================================================
+# OS & EDITOR SPECIFIC
+# ==============================================================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==============================================================================
+# BACKEND: PYTHON & UV
+# ==============================================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Pytest / Coverage (if you add testing later)
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+
+# ==============================================================================
+# BACKEND: MACHINE LEARNING & MEDIA PROCESSING
+# ==============================================================================
+# Do NOT commit heavy AI model weights to GitHub!
+weights/
+*.pth
+*.pkl
+*.keras
+*.h5
+*.onnx
+
+# Specific HuggingFace/RoBERTa downloaded folders
+roberta_fakenews/
+
+# Video processing caches and temp files
+frames_cache/
+temp_video.mp4
+temp_video.avi
+
+# Datasets (Prevent accidentally pushing your FF++ videos)
+FF++/
+archive/
+dataset/
+*.mp4
+*.jpg
+*.png
+*.npy
+
+# ==============================================================================
+# FRONTEND: REACT & VITE
+# ==============================================================================
+# Node dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production builds
+dist/
+build/
+dist-ssr/
+
+# Vite / React temp files
+.eslintcache
+vite.config.js.timestamp-*
+
+# NPM / Yarn / Bun Error Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+bun.lockb
+
+# ==============================================================================
+# SECRETS & ENV VARIABLES
+# ==============================================================================
+# NEVER commit environment variables containing API keys or server paths
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Dynamically created folder for video frame extraction (Bypasses Windows Temp bug)
+uploads/
+**/uploads/
